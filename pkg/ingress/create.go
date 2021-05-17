@@ -69,11 +69,9 @@ func (c *controller) getExporterSidecar() (*core.Container, error) {
 	if monSpec != nil && monSpec.Prometheus != nil {
 		return &core.Container{
 			Name: "exporter",
-			Args: append([]string{
-				"export",
-				fmt.Sprintf("--address=:%d", monSpec.Prometheus.Exporter.Port),
-				fmt.Sprintf("--enable-analytics=%v", cli.EnableAnalytics),
-			}, cli.LoggerOptions.ToFlags()...),
+			Args: []string{
+				fmt.Sprintf("--web.listen-address=:%d", monSpec.Prometheus.Exporter.Port),
+			},
 			Env: []core.EnvVar{
 				{
 					Name:  analytics.Key,
